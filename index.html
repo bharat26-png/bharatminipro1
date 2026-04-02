@@ -25,31 +25,33 @@
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
         body { font-family: 'Montserrat', sans-serif; color: white; perspective: 1000px; }
 
-        /* --- NEW ANIMATED BACKGROUND (ONLY CHANGE) --- */
+        /* --- FEATURE: NCC Animated Background --- */
         .ncc-background {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2;
             overflow: hidden;
-            background: linear-gradient(45deg, #050505, #1a1c12, #050505, #2a2e1c);
-            background-size: 400% 400%;
-            animation: moveGradient 15s ease infinite;
+            background-color: var(--bg-dark);
         }
 
-        @keyframes moveGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .ncc-background img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.15;
+            filter: blur(5px) grayscale(100%) sepia(100%) hue-rotate(60deg) saturate(150%);
+            animation: bgZoomOut 20s linear infinite alternate;
         }
 
-        /* Subtle Marching Grid Overlay */
+        @keyframes bgZoomOut {
+            from { transform: scale(1.1); }
+            to { transform: scale(1); }
+        }
+
         .ncc-background::after {
             content: "";
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(75, 83, 32, 0.1) 1px, transparent 1px), 
-                            linear-gradient(90deg, rgba(75, 83, 32, 0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1), rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px);
             opacity: 0.3;
         }
 
@@ -68,62 +70,34 @@
         .btn-neon { padding: 18px 45px; font-size: 1rem; color: white; background: transparent; border: 1px solid var(--gold); border-radius: 50px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; animation: neonPulse 2s infinite; transition: 0.5s; z-index: 100; }
         .btn-neon:hover { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 50px var(--accent); }
 
-        /* Slider Card */
         .slider-card { background: var(--glass); backdrop-filter: blur(20px); padding: 50px 30px; border-radius: 30px; border: 1px solid var(--glass-border); max-width: 500px; width: 95%; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6); }
         .step-content { display: none; min-height: 150px; animation: fadeInScale 0.8s forwards; flex-direction: column; justify-content: center; }
         .step-content.active { display: flex; }
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .step-text { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 30px; }
 
-        /* Curtain & Stage */
         .curtain-panel { position: absolute; top: 0; width: 51%; height: 100%; background: repeating-linear-gradient(to right, #1a1c12, #2a2e1c 10%); z-index: 20; transition: transform 2.5s cubic-bezier(0.645, 0.045, 0.355, 1); }
         .curtain-left { left: 0; border-right: 2px solid var(--gold); }
         .curtain-right { right: 0; border-left: 2px solid var(--gold); }
         .open .curtain-left { transform: translateX(-100%); }
         .open .curtain-right { transform: translateX(100%); }
 
-        /* Gallery - Normal Grid (No Animation) */
         #gallery-page { display: block; overflow-y: auto; padding: 100px 20px; background: transparent; position: relative; }
-        
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 5;
-        }
-        
-        .memory-card {
-            position: relative;
-            height: 350px;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        
-        .memory-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: var(--gold);
-            box-shadow: 0 15px 40px var(--accent-glow);
-        }
-        
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 5; }
+        .memory-card { position: relative; height: 350px; border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: transform 0.3s ease; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .memory-card:hover { transform: translateY(-10px) scale(1.02); border-color: var(--gold); box-shadow: 0 15px 40px var(--accent-glow); }
         .memory-image { width: 100%; height: 100%; object-fit: cover; }
         .memory-hover-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.5s; padding: 20px; }
         .memory-card:hover .memory-hover-overlay { opacity: 1; }
-        
         .gallery-title { font-family: 'Dancing Script'; font-size: 3rem; color: var(--gold); margin-bottom: 50px; text-shadow: 0 0 15px rgba(0,0,0,0.8); }
-
     </style>
 </head>
 
 <body>
 
-    <div class="ncc-background"></div>
+    <div class="ncc-background">
+        <img src="./assets/images/konstantin-v-march.jpg" alt="NCC Marching">
+    </div>
 
     <div id="particle-container" style="position: fixed; width:100%; height:100%; top:0; left:0; pointer-events:none; z-index: 0;"></div>
 
@@ -156,7 +130,7 @@
     </section>
 
     <section id="curtain-page" class="page" style="padding: 0;">
-        <div class="stage" id="stage" style="width:100%; height:100%; position:relative; overflow:hidden;">
+        <div id="stage" style="width:100%; height:100%; position:relative; overflow:hidden;">
             <div class="curtain-panel curtain-left"></div>
             <div class="curtain-panel curtain-right"></div>
             <div class="secret-content" style="height:100%; display:flex; align-items:center; justify-content:center; background:#000;">
@@ -177,84 +151,83 @@
 
     <section id="gallery-page" class="page">
         <h2 class="gallery-title">Moments We Lived Together 📸</h2>
-        
         <div class="gallery-grid">
-            <div class="memory-card"><img src="j9.jpg" class="memory-image"><div class="memory-hover-overlay"><p style="font-family:'Dancing Script'; font-size:1.5rem;">Strength in Unity</p></div></div>
-            <div class="memory-card"><img src="ritika.jpeg" class="memory-image"><div class="memory-hover-overlay"><p style="font-family:'Dancing Script'; font-size:1.5rem;">Best buddy</p></div></div>
-            <div class="memory-card"><img src="g3.jpg" class="memory-image"><div class="memory-hover-overlay"><p style="font-family:'Dancing Script'; font-size:1.5rem;">The Drill Days</p></div></div>
-            <div class="memory-card"><img src="d4.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="d5.jpg" class="memory-image"><div class="memory-hover-overlay"><p style="font-family:'Dancing Script'; font-size:1.5rem;">IGC Last day</p></div></div>
-            <div class="memory-card"><img src="d6.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="d7.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="a1.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="a2.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="a4.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="a5.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="a6.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="k1.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="a8.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="a9.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="b1.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="b2.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="b3.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="b4.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="b5.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="b6.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="b7.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="b9.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="b8.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="c2.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="c3.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="c4.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="c5.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="c6.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="c7.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="c8.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="c9.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="d1.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="d2.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="d8.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="d9.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="e1.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="e2.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="e3.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="e4.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="e5.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="e6.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="e7.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="e8.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="e9.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="f1.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="f2.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="f3.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="f5.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="f6.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="f7.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="f8.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="f9.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="g1.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="g4.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="g6.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="g8.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="g9.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="j1.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="j2.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="j3.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="j4.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="j7.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="j8.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="k2.jpg" class="memory-image"></div>
-            <div class="memory-card"><img src="k3.webp" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/j9.jpg" class="memory-image"><div class="memory-hover-overlay"><p style="font-family:'Dancing Script'; font-size:1.5rem;">Strength in Unity</p></div></div>
+            <div class="memory-card"><img src="./assets/images/ritika.jpeg" class="memory-image"><div class="memory-hover-overlay"><p style="font-family:'Dancing Script'; font-size:1.5rem;">Best buddy</p></div></div>
+            <div class="memory-card"><img src="./assets/images/g3.jpg" class="memory-image"><div class="memory-hover-overlay"><p style="font-family:'Dancing Script'; font-size:1.5rem;">The Drill Days</p></div></div>
+            <div class="memory-card"><img src="./assets/images/d4.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/d5.jpg" class="memory-image"><div class="memory-hover-overlay"><p style="font-family:'Dancing Script'; font-size:1.5rem;">IGC Last day</p></div></div>
+            <div class="memory-card"><img src="./assets/images/d6.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/d7.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/a1.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/a2.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/a4.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/a5.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/a6.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/k1.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/a8.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/a9.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/b1.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/b2.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/b3.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/b4.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/b5.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/b6.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/b7.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/b9.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/b8.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/c2.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/c3.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/c4.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/c5.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/c6.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/c7.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/c8.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/c9.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/d1.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/d2.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/d8.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/d9.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/e1.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/e2.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/e3.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/e4.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/e5.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/e6.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/e7.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/e8.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/e9.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/f1.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/f2.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/f3.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/f5.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/f6.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/f7.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/f8.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/f9.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/g1.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/g4.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/g6.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/g8.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/g9.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/j1.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/j2.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/j3.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/j4.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/j7.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/j8.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/k2.jpg" class="memory-image"></div>
+            <div class="memory-card"><img src="./assets/images/k3.webp" class="memory-image"></div>
         </div>
 
         <div style="margin-top:100px; padding-bottom: 50px; text-align: center; position: relative; z-index: 5;">
-            <h2 style="color: var(--gold); font-size: 2.5rem; text-shadow: 0 0 10px rgba(0,0,0,0.8);">Jai Hind</h2>
+            <h2 style="color: var(--gold); font-size: 2.5rem; text-shadow: 0 0 10px rgba(0,0,0,0.8);">Jai Hind 🇮🇳</h2>
             <button class="btn-neon" onclick="location.reload()">Restart Magic</button>
         </div>
     </section>
 
     <audio id="bg-audio" loop>
-        <source src="memories.mp3" type="audio/mpeg">
+        <source src="./assets/audio/memories.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -263,9 +236,7 @@
             const target = document.getElementById(pageId);
             target.classList.add('active');
             if (pageId === 'curtain-page') {
-                setTimeout(() => {
-                    document.getElementById('stage').classList.add('open');
-                }, 1000);
+                setTimeout(() => { document.getElementById('stage').classList.add('open'); }, 1000);
             }
         }
 
